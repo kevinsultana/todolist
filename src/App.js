@@ -9,13 +9,22 @@ import {
   Pressable,
   TouchableNativeFeedback,
   Alert,
+  LayoutAnimation,
+  Platform,
+  UIManager,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import Gap from './src/component/gap';
+import Gap from './component/gap';
 import CheckBox from '@react-native-community/checkbox';
 import {useEffect, useState} from 'react';
-import styles from './src/style/styleApp';
+import styles from './style/styleApp';
 import EncryptedStorage from 'react-native-encrypted-storage';
+
+if (Platform.OS === 'android') {
+  if (UIManager.setLayoutAnimationEnabledExperimental) {
+    UIManager.setLayoutAnimationEnabledExperimental(true);
+  }
+}
 
 export default function App() {
   const [task, setTask] = useState([]);
@@ -150,7 +159,10 @@ export default function App() {
                     <Text style={styles.textDeskripsi}>{item.deskripsi}</Text>
                   )}
                 </View>
-                <TouchableOpacity onPress={() => showDesc(item.id)}>
+                <TouchableOpacity
+                  onPress={() => {
+                    LayoutAnimation.easeInEaseOut(), showDesc(item.id);
+                  }}>
                   {item.collapse ? (
                     <View style={styles.viewBtnCollapse}>
                       <Icon name={'chevron-up'} size={25} color={'white'} />
@@ -195,7 +207,7 @@ export default function App() {
               <Icon name={'plus-thick'} size={20} color={'white'} />
               <Gap width={5} />
               <Text style={{fontSize: 18, color: 'white', fontWeight: '500'}}>
-                Tambah Tugas
+                Add Task
               </Text>
             </View>
           </TouchableOpacity>
@@ -213,7 +225,7 @@ export default function App() {
           <View style={styles.viewModal}>
             <View style={styles.headerModal}>
               <Icon name="plus-thick" color={'black'} size={25} />
-              <Text style={{fontSize: 17, fontWeight: '500', color: 'grey'}}>
+              <Text style={{fontSize: 17, fontWeight: '500', color: 'black'}}>
                 Tambah Tugas
               </Text>
               <TouchableOpacity>
@@ -263,7 +275,7 @@ export default function App() {
           <View style={styles.viewModal}>
             <View style={styles.headerModal}>
               <Icon name="lead-pencil" color={'black'} size={25} />
-              <Text style={{fontSize: 17, fontWeight: '500', color: 'grey'}}>
+              <Text style={{fontSize: 17, fontWeight: '500', color: 'black'}}>
                 Edit Tugas
               </Text>
               <TouchableOpacity>
